@@ -121,11 +121,12 @@ var waapi = (function() {
       source.start(0.0, loopStart, 1000);
       return source;
     },
-    loopSound: function (gain, buffer, startSamples, endSamples, sampleRate) {
+    loopSound: function (gain, buffer, startSamples, endSamples, sampleRate, playbackRate) {
       var source = context.createBufferSource();
       var loopStart = startSamples / sampleRate;
       source.buffer = buffer;
       source.loop = true;
+      source.playbackRate.value = playbackRate;
       //source.loopStart = loopStart;
       //source.loopEnd = ((endSamples + startSamples) / sampleRate);
       source.connect(gain);

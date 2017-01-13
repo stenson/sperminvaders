@@ -3,6 +3,7 @@
 * {margin:0;padding:0;font-family:"space invaders Regular";}
 
 body {background-color: rgb(23,65,197);}
+
 #hero {
   height: 100px;
   margin: auto auto;
@@ -12,6 +13,14 @@ body {background-color: rgb(23,65,197);}
   background-position: bottom;
   margin-bottom: -30px;
 }
+
+#titleHighScores a {
+  color: royalblue;
+  background: hotpink;
+  color: white;
+  padding: 10px 14px 8px;
+}
+
 #container {width:500px;height:600px;margin:0 auto;margin-top:30px;position:relative;border:1px solid #EEE;}
 #info {width:500px;height:600px;position:absolute;color:#FFF;font-size:16px;z-index: 10;}
 

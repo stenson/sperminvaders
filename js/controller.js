@@ -1,20 +1,21 @@
 var buffers = {};
 var gainNode = null;
+var loopMusic = null;
 
-function playSound(key, shouldLoop) {
+function playSound(key, shouldLoop, rate) {
   var buffer = buffers["/sounds/" + key + ".mp3"];
   if (buffer && gainNode) {
     if (shouldLoop === true) {
-      waapi.loopSound(gainNode, buffer, 0, buffer.length, 44100)
+      return waapi.loopSound(gainNode, buffer, 0, buffer.length, 44100, rate);
     } else {
-      waapi.playSound(gainNode, buffer, 0, buffer.length, 44100);
+      return waapi.playSound(gainNode, buffer, 0, buffer.length, 44100);
     }
   }
 }
 
 
 if (waapi.context != null) {
-  var urls = ["a", "b", "c", "d", "e", "f", "g", "h", "loop"].map(function(l) {
+  var urls = ["a", "b", "c", "d", "e", "f", "g", "h", "loop2"].map(function(l) {
     return "/sounds/" + l + ".mp3";
   });
   waapi.loadSounds(urls, function(soundBuffers) {
@@ -244,7 +245,7 @@ function init() {
   $("#container").append(renderer.view);
 
   // create an array of assets to load
-  var assetsToLoader = ["assets/sprites.json"];
+  var assetsToLoader = ["assets/sprites2.json"];
 
   // create a new loader
   loader = new PIXI.AssetLoader(assetsToLoader);
@@ -352,12 +353,14 @@ function keyDownStart(e) {
   if (e.keyCode == 13) {
     $(document).unbind("keyup", keyDownStart);
     $("#startGame").fadeOut(300, showLevel);
-    //playSound("loop", true);
   }
 
 }
 
 function showLevel() {
+
+  loopMusic && loopMusic.stop();
+  loopMusic = playSound("loop2", true, game.LEVEL);
 
   // Credit = 0
   $("#nbCredit").html("00");
@@ -683,6 +686,7 @@ function animateLine() {
   else delayedVar = 1;
 
   if (counterLine == 50) {
+    loopMusic.playbackRate.value += 0.05;
     counterLine = 0;
 
     for (var i = 0; i < game.lines.length; i++) game.lines[i].position.y += incrY;
@@ -805,7 +809,6 @@ function checkCollisionP() {
           } else {
             playSound("e");
           }
-          console.log(monster.points);
           game.SCORE += monster.points;
           updateScore(game.SCORE);
 
@@ -1141,7 +1144,8 @@ function clearGame() {
 
 function nextLevel() {
 
-  console.log("NEXT LEVEL");
+  //console.log("NEXT LEVEL");
+  playSound("c");
 
   clearGame();
   game.LEVEL++;
@@ -1151,6 +1155,7 @@ function nextLevel() {
 
 function gameOver() {
 
+  loopMusic.stop();
   playSound("f");
   onEnterFrame = false;
   clearGame();

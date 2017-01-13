@@ -96,7 +96,7 @@
 		"sourceSize": {"w":14,"h":11}
 	},
 	"pont5.png": {
-		"frame": {"x":82, "y":80, "w":14, "h":11},
+		"frame": {"x":182, "y":80, "w":14, "h":11},
 		"spriteSourceSize": {"x":0,"y":0,"w":14,"h":11},
 		"sourceSize": {"w":14,"h":11}
 	},
@@ -163,7 +163,7 @@
 
 },
 "meta": {
-	"image": "sprites_p.png",
+	"image": "sprites3.png",
 	"size": {"w": 112, "h": 112},
 	"scale": "1"
 }
