@@ -1181,17 +1181,16 @@ function showHighScores() {
 
   $("#saveScore").hide();
   $("#saveGame").hide();
-
   $("#highscores").fadeIn(300);
 
-  // Collection HighScore
-  var scoreCollection = new app.Collections.ScoreCollection();
-  scoreCollection.fetch({
-    success: function () {
-      var highScoresView = new app.Views.HighScoresView({collection: scoreCollection});
-      $("#highscores #list").append(highScoresView.render().el);
-    }
-  });
+  //// Collection HighScore
+  //var scoreCollection = new app.Collections.ScoreCollection();
+  //scoreCollection.fetch({
+  //  success: function () {
+  //    var highScoresView = new app.Views.HighScoresView({collection: scoreCollection});
+  //    $("#highscores #list").append(highScoresView.render().el);
+  //  }
+  //});
 
   $(window).bind("keydown", reStart);
 
