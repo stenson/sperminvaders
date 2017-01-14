@@ -7,72 +7,82 @@
   <meta property="og:title" content="Sperm Invaders" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="http://sperminvaders.org" />
+  <meta content="width=700, initial-scale=0.5" name="viewport" />
   <!--<meta property="og:image" content="http://dev.tibz.net/space-invaders-pixi/assets/share.jpg" />-->
   <meta property="og:site_name" content="Sperm Invaders" />
   <meta name="description" content="Sperm Invaders" />
   <meta name="keywords" content="" />
   <!-- FIN META FACEBOOK -->
 
-	<link rel="stylesheet" href="css/stylesheet.css?t=2">
+	<link rel="stylesheet" href="css/stylesheet.css?t=5">
 </head>
 <body>
-<div id="hero"></div>
-<div id="container">
-  <div id="info">
-    <div id="titleScore">SCORE < 1 ></div>
-    <div id="score">000000</div>
-    <div id="titleHighScore"></div>
-    <div id="highScore"></div>
-    <div id="greenLine"></div>
-    <div id="life">1</div>
-    <div id="credit">CREDIT</div>
-    <div id="nbCredit">01</div>
-    <div id="startGame">NEW GAME ? &rsaquo;PRESS ENTER&lsaquo;</div>
-    <div id="saveGame">SAVE SCORE ? &rsaquo;PRESS ENTER&lsaquo;</div>
-    <div id="gameOver">GAME OVER</div>
-    <div id="loading">LOADING...</div>
-    <div id="level">LEVEL 1</div>
-    <div id="saveScore">
+<!--<div id="hero"></div>-->
 
-    </div>
-  </div>
+<div id="framer">
+  <div id="container-container">
+    <div id="container">
+      <div id="info">
+        <div id="titleScore">SCORE < 1 ></div>
+        <div id="score">000000</div>
+        <div id="titleHighScore"></div>
+        <div id="highScore"></div>
+        <div id="greenLine"></div>
+        <div id="life">1</div>
+        <div id="credit">CREDIT</div>
+        <div id="nbCredit">01</div>
+        <div id="startGame">NEW GAME ? &rsaquo;PRESS ENTER&lsaquo;</div>
+        <div id="saveGame">SAVE SCORE ? &rsaquo;PRESS ENTER&lsaquo;</div>
+        <div id="gameOver">GAME OVER</div>
+        <div id="loading">LOADING...</div>
+        <div id="level">LEVEL 1</div>
+        <div id="saveScore">
 
-  <div id="highscores">
-    <div id="list">
-      <div class="scoreItem">
-        <div class="positionT">1</div>
-        <div class="scoreT">999999</div>
-        <div class="pseudoT">Ida B. Wells</div>
+        </div>
       </div>
+
+      <div id="highscores">
+        <div id="startGame2">RESTART GAME ? &rsaquo;PRESS ENTER&lsaquo;</div>
+        <div id="titleHighScores"></div>
+        <div id="greenLine2"></div>
+        <div id="list">
+          <a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwjZx9LTnsLRAhUNjGkKHf5tCpkYABAA&ohost=www.google.com&cid=CAESIOD2MlzkSnXz5hBv90Hisc7ISTPIK__urowBVv0KC3dc&sig=AOD64_0GPGJj8n-WmoMs_FxFCShqJrlybA&q=&ved=0ahUKEwiE3M3TnsLRAhVGslQKHXOcAsgQ0QwIGw&adurl=">DONATE
+            TO PLANNED PARENTHOOD</a>
+          <a href="https://sperminvaders.threadless.com/">SPERM INVADERS MERCHANDISE</a>
+        </div>
+        <div id="greenLine3"></div>
+      </div>
+
     </div>
-    <div id="startGame2">RESTART GAME ? &rsaquo;PRESS ENTER&lsaquo;</div>
-    <div id="titleHighScores"><a href="https://secure.ppaction.org/site/Donation2">DONATE TO&rsaquo;PLANNED PARENTHOOD&lsaquo;!!!</a></div>
-    <div id="greenLine2"></div>
-    <div id="greenLine3"></div>
   </div>
 
+  <div id="frame"></div>
+  <div id="frame-bottom"></div>
+
+  <div id="mobile-buttons">
+    <div id="left">
+      LEFT
+    </div>
+    <div id="right">
+      RIGHT
+    </div>
+    <div id="fire">
+      FIRE
+    </div>
+  </div>
 </div>
 
-  <script type="text/template" id="inputTemplate">
-    <input type="text" value="<%=letter%>" maxlength="1" readonly="readonly">
-  </script>
-
-  <script type="text/template" id="scoreTemplate">
-    <div class="positionT"><%=id%></div>
-    <div class="scoreT"><%=score%></div>
-    <div class="pseudoT"><%=pseudo%></div>
-  </script>
-
 <script src="js/lib/jquery-1.10.2.min.js"></script>
+<script src="js/lib/modernizr.js"></script>
 <script src="js/lib/underscore-min.js"></script>
 <script src="js/lib/pixi.min.js"></script>
 <script src="js/lib/TweenLite.min.js"></script>
-<script src="js/lib/backbone-min.js"></script>
+<!--<script src="js/lib/backbone-min.js"></script>-->
 <script src="js/lib/quadTree.min.js"></script>
 <script src="js/classes.js?t=1"></script>
-<script src="js/customName.js?t=1"></script>
-<script src="js/highScores.js?t=1"></script>
+<!--<script src="js/customName.js?t=1"></script>-->
+<!--<script src="js/highScores.js?t=1"></script>-->
 <script src="js/lib/waapi.js?t=1"></script>
-<script src="js/controller.js?t=2"></script>
+<script src="js/controller.js?t=7"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 var buffers = {};
 var gainNode = null;
 var loopMusic = null;
+//var touchSupport = 'ontouchstart' in document.documentElement;
 
 function playSound(key, shouldLoop, rate) {
   var buffer = buffers["/sounds/" + key + ".mp3"];
@@ -14,8 +15,8 @@ function playSound(key, shouldLoop, rate) {
 }
 
 
-if (waapi.context != null) {
-  var urls = ["a", "b", "c", "d", "e", "f", "g", "h", "loop2"].map(function(l) {
+if (Modernizr.webaudio && waapi.context != null) {
+  var urls = ["a", "b", "c", "d", "e", "f", "g", "h", "loop2", "ending"].map(function(l) {
     return "/sounds/" + l + ".mp3";
   });
   waapi.loadSounds(urls, function(soundBuffers) {
@@ -83,9 +84,9 @@ game.result = [];
 // Keyboard
 
 var keycode = {};
-keycode.LEFT = false;
-keycode.RIGHT = false;
-keycode.SPACE = false;
+keycode.lefting = false;
+keycode.righting = false;
+keycode.spacing = false;
 
 /**************************************************/
 
@@ -226,18 +227,6 @@ $(document).ready(init);
 
 function init() {
 
-  // Recupere le HighScore
-  var scoreCollectionTemp = new app.Collections.ScoreCollection();
-  scoreCollectionTemp.fetch({
-    success: function () {
-
-      $("#highScore").html(convertScore(scoreCollectionTemp.models[0].get("score")));
-      $("#titleHighScore").html("HI SCORE &rsaquo;" + scoreCollectionTemp.models[0].get("pseudo") + "&lsaquo;");
-      scoreToBeInTop10 = scoreCollectionTemp.models[9].get("score");
-
-    }
-  });
-
   // PIXI
   stage = new PIXI.Stage(game.BACKGROUND_COLOR);
   renderer = PIXI.autoDetectRenderer(game.STAGE_WIDTH, game.STAGE_HEIGHT);
@@ -341,20 +330,27 @@ function startScreen() {
 
   $("#startGame").fadeIn(300);
   $(document).bind("keyup", keyDownStart);
+  $(document).bind("touchend", tapStart);
 
   // Life
   updateLife();
   renderer.render(stage);
-
 }
 
 function keyDownStart(e) {
-
   if (e.keyCode == 13) {
-    $(document).unbind("keyup", keyDownStart);
-    $("#startGame").fadeOut(300, showLevel);
+    freshStart();
   }
+}
 
+function tapStart(e) {
+  freshStart();
+}
+
+function freshStart() {
+  $(document).unbind("keyup", keyDownStart);
+  $(document).unbind("touchend", tapStart);
+  $("#startGame").fadeOut(300, showLevel);
 }
 
 function showLevel() {
@@ -433,41 +429,52 @@ function newGame() {
   $(document).bind("keydown", keydown);
   $(document).bind("keyup", keyup);
 
+  var $left = $("#left");
+  var $right = $("#right");
+  $left.bind("touchstart", _.bind(moveLeft, null, true));
+  $left.bind("touchend", _.bind(moveLeft, null, false));
+  $right.bind("touchstart", _.bind(moveRight, null, true));
+  $right.bind("touchend", _.bind(moveRight, null, false));
+  $("#fire").bind("touchstart", tryFire);
 }
 
 function keydown(e) {
-
-  if (e.keyCode == 37) keycode.LEFT = true;
-  if (e.keyCode == 39) keycode.RIGHT = true;
-  if (e.keyCode == 32) {
-    if (canFire) {
-      fire();
-      disableFire();
-      timerKeyboard = setTimeout(enableFire, game.PAUSE_BEHIND_FIRE_SPACESHIP);
-    }
-  }
-
-
+  if (e.keyCode == 37) moveLeft(true);
+  if (e.keyCode == 39) moveRight(true);
+  if (e.keyCode == 32) tryFire();
 }
 
 function keyup(e) {
+  if (e.keyCode == 37) moveLeft(false);
+  if (e.keyCode == 39) moveRight(false);
+}
 
-  if (e.keyCode == 37) keycode.LEFT = false;
-  if (e.keyCode == 39) keycode.RIGHT = false;
+function moveLeft(should) {
+  keycode.lefting = should;
+  return false;
+}
 
+function moveRight(should) {
+  keycode.righting = should;
+  return false;
+}
+
+function tryFire() {
+  if (canFire) {
+    fire();
+    disableFire();
+    timerKeyboard = setTimeout(enableFire, game.PAUSE_BEHIND_FIRE_SPACESHIP);
+  }
+  return false;
 }
 
 function enableFire() {
-
   clearTimeout(timerKeyboard);
   canFire = true;
-
 }
 
 function disableFire() {
-
   canFire = false;
-
 }
 
 function buildMonster() {
@@ -609,12 +616,11 @@ function fireRandom() {
 function checkKeyboard() {
 
   if (spaceship) {
-
-    if (keycode.LEFT) {
+    if (keycode.lefting) {
       if (spaceship.position.x > 0) spaceship.position.x -= game.SPACESHIP_SPEED;
       else spaceship.position.x = 0;
     }
-    if (keycode.RIGHT) {
+    if (keycode.righting) {
       if (spaceship.position.x < renderer.width - spaceship.texture.width) spaceship.position.x += game.SPACESHIP_SPEED;
       else spaceship.position.x = renderer.width - spaceship.texture.width;
     }
@@ -1136,9 +1142,9 @@ function clearGame() {
   counterLine = 0;
   isTouch = false;
 
-  keycode.LEFT = false;
-  keycode.RIGHT = false;
-  keycode.SPACE = false;
+  keycode.lefting = false;
+  keycode.righting = false;
+  keycode.spacing = false;
 
 }
 
@@ -1150,99 +1156,73 @@ function nextLevel() {
   clearGame();
   game.LEVEL++;
   showLevel();
-
 }
 
 function gameOver() {
-
   loopMusic.stop();
-  playSound("f");
+  playSound("ending");
+
   onEnterFrame = false;
   clearGame();
-  if (game.SCORE > scoreToBeInTop10) $("#gameOver").fadeIn(300).delay(2000).fadeOut(200, recordName);
-  else $("#gameOver").fadeIn(300).delay(2000).fadeOut(200, showHighScores);
-
-}
-
-function recordName() {
-
-  // customNameView
-  var customNameView = new app.Views.CustomNameView();
-  customNameView.setScore(game.SCORE);
-  $("#saveScore").append(customNameView.render().el);
-  $("#saveScore").show();
-  $("#saveGame").show();
-  customNameView.on("complete", showHighScores);
-
-
+  $("#gameOver").fadeIn(300).delay(1200).fadeOut(200, showHighScores);
 }
 
 function showHighScores() {
-
   $("#saveScore").hide();
   $("#saveGame").hide();
   $("#highscores").fadeIn(300);
 
-  //// Collection HighScore
-  //var scoreCollection = new app.Collections.ScoreCollection();
-  //scoreCollection.fetch({
-  //  success: function () {
-  //    var highScoresView = new app.Views.HighScoresView({collection: scoreCollection});
-  //    $("#highscores #list").append(highScoresView.render().el);
-  //  }
-  //});
+  console.log(game.SCORE);
 
-  $(window).bind("keydown", reStart);
+  //_.shuffle(["Ida B. Wells", "Grace Lee Boggs", "Dolores Huerta", "Ella Baker", "Susan B. Anthony"])
+  //  .map(function(woman, i) {
+  //    var $item = $("<div/>").addClass("scoreItem");
+  //    $item.append($("<div/>").addClass("positionT").text(i + 1));
+  //    $item.append($("<div/>").addClass("scoreT").text(999999 - i));
+  //    $item.append($("<div/>").addClass("pseudoT").text(woman));
+  //    $("#list").append($item);
+  //  });
 
+  $(window).bind("keydown", keyRestart);
+  $(document).bind("touchstart", restart);
 }
 
-function reStart(e) {
-
+function keyRestart(e) {
   if (e.keyCode == 13) {
-
-    game.LIFE = 3;
-    game.LEVEL = 1;
-    game.SCORE = 0;
-    updateScore(game.SCORE);
-
-    $(window).unbind("keydown", reStart);
-    $("#highscores").hide();
-    $("#highscores #list").html("");
-    // restart
-
-    updateLife();
-    renderer.render(stage);
-    showLevel();
-
-
+    restart();
   }
+}
 
+function restart(e) {
+  game.LIFE = 3;
+  game.LEVEL = 1;
+  game.SCORE = 0;
+  updateScore(game.SCORE);
+
+  $(window).unbind("keydown", keyRestart);
+  $(document).unbind("touchstart", restart);
+  $("#highscores").hide();
+  $("#highscores #list").html("");
+
+  updateLife();
+  renderer.render(stage);
+  showLevel();
 }
 
 function animate() {
-
   if (onEnterFrame) {
-
     updateTree();
-
     checkKeyboard();
-
     checkBigMonster();
-
     checkCollisionBP();
     checkCollisionBS();
-
     if (!isTouch) checkCollisionS();
     checkCollisionP();
-
     checkBulletS();
     checkBulletP();
 
-    // render Stage
     renderer.render(stage);
-
     requestAnimFrame(animate);
-
   }
 }
 
@@ -1259,7 +1239,7 @@ function detectCollision(x1, y1, Wsize1, Hsize1, x2, y2, Wsize2, Hsize2) {
   top2 = y2;
   bottom2 = y2 + Hsize2;
   return !(left1 > right2 || left2 > right1 || top1 > bottom2 || top2 > bottom1);
-};
+}
 
 function random(nMinimum, nMaximum, nRoundToInterval) {
 
@@ -1281,4 +1261,16 @@ function random(nMinimum, nMaximum, nRoundToInterval) {
 function floor(nNumber, nRoundToInterval) {
 
   return Math.floor(nNumber / nRoundToInterval) * nRoundToInterval;
+}
+
+//showHighScores();
+
+$(document).keydown(function(e) {
+  if (e.which == 32) {
+    return false;
+  }
+});
+
+if (Modernizr.touchevents) {
+  $("#mobile-buttons").css("visibility", "visible");
 }
