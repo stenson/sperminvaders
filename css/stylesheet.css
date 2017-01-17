@@ -54,29 +54,29 @@ div#list {
 }
 
 #frame {
-  background-image: url(/frame-top-1.png);
+  background-image: url(/frame-top-2.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: top center;
   width: 690px;
   margin: auto auto;
   position: absolute;
-  top: 0px;
-  left: 0px;
-  height: 600px;
+  top: 0;
+  left: 0;
+  height: 420px;
   z-index: 10000;
 }
 
 #frame-bottom {
-  background-image: url(/frame-bottom-1.png);
+  background-image: url(/frame-bottom-2.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: bottom center;
   width: 690px;
   position: absolute;
-  bottom: 0px;
-  left: 0px;
-  height: 600px;
+  bottom: 0;
+  left: 0;
+  height: 400px;
 }
 
 #titleScore {position:absolute;left:45px;top:60px;}
@@ -109,11 +109,28 @@ div#list {
 #saveScore input {width:15px;background-color:#000;color:#FFF;border:none;/*border-bottom:1px solid #04dd08;*/padding:5px;padding-left:10px;font-size: 20px;margin-right:5px;}
 
 #highscores {
-  width:500px;height:600px;position:absolute;color:#FFF;font-size:16px;background-color:#000;display:none;
+  width:500px;
+  height:600px;
+  top: 231px;
+  left: 96px;
+  position:absolute;
+  color:#FFF;
+  font-size:16px;
+  background-color:transparent;
+  display:none;
   z-index: 5000000;
 }
 
-#titleHighScores {position:absolute;left:45px;top:60px;}
+#highscreen {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 484px;
+  background: black;
+  height: 500px;
+}
+
+#titleHighScores {position:absolute;left:0px;top:60px;text-align:center;width:100%;}
 
 #startGame2 {position:absolute;width:100%;text-align:center;top:450px;}
 

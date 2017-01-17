@@ -24,6 +24,8 @@ if (Modernizr.webaudio && waapi.context != null) {
   });
 
   gainNode = waapi.gain(waapi.destination());
+} else {
+  console.log("no context");
 }
 
 // NameSpace
@@ -439,14 +441,14 @@ function newGame() {
 }
 
 function keydown(e) {
-  if (e.keyCode == 37) moveLeft(true);
-  if (e.keyCode == 39) moveRight(true);
-  if (e.keyCode == 32) tryFire();
+  if (e.keyCode == 37) return moveLeft(true);
+  if (e.keyCode == 39) return moveRight(true);
+  if (e.keyCode == 32) return tryFire();
 }
 
 function keyup(e) {
-  if (e.keyCode == 37) moveLeft(false);
-  if (e.keyCode == 39) moveRight(false);
+  if (e.keyCode == 37) return moveLeft(false);
+  if (e.keyCode == 39) return moveRight(false);
 }
 
 function moveLeft(should) {
@@ -992,20 +994,16 @@ function checkCollisionBS() {
 
 
 function updateScore(score) {
-
   var nbCharMax = 6;
   var str = "";
   var nbChar = score.toString().length;
   var len = nbCharMax - nbChar;
   for (var i = 0; i < len; i++) str += "0";
   str += score.toString();
-
   $("#score").html(str);
-
 }
 
 function convertScore(score) {
-
   var nbCharMax = 6;
   var str = "";
   var nbChar = score.toString().length;
@@ -1013,7 +1011,6 @@ function convertScore(score) {
   for (var i = 0; i < len; i++) str += "0";
   str += score.toString();
   return str;
-
 }
 
 function updateLife() {
@@ -1171,8 +1168,7 @@ function showHighScores() {
   $("#saveScore").hide();
   $("#saveGame").hide();
   $("#highscores").fadeIn(300);
-
-  console.log(game.SCORE);
+  $("#titleHighScores").text("Your Score < " + game.SCORE + " >");
 
   //_.shuffle(["Ida B. Wells", "Grace Lee Boggs", "Dolores Huerta", "Ella Baker", "Susan B. Anthony"])
   //  .map(function(woman, i) {
@@ -1184,7 +1180,7 @@ function showHighScores() {
   //  });
 
   $(window).bind("keydown", keyRestart);
-  $(document).bind("touchstart", restart);
+  $("#highscores").bind("click", restart);
 }
 
 function keyRestart(e) {
@@ -1194,15 +1190,18 @@ function keyRestart(e) {
 }
 
 function restart(e) {
+  if ($(e.target).prop("tagName") == "A") {
+    return true;
+  }
+
   game.LIFE = 3;
   game.LEVEL = 1;
   game.SCORE = 0;
   updateScore(game.SCORE);
 
   $(window).unbind("keydown", keyRestart);
-  $(document).unbind("touchstart", restart);
+  $("#highscores").unbind("click", restart);
   $("#highscores").hide();
-  $("#highscores #list").html("");
 
   updateLife();
   renderer.render(stage);
@@ -1259,7 +1258,6 @@ function random(nMinimum, nMaximum, nRoundToInterval) {
 }
 
 function floor(nNumber, nRoundToInterval) {
-
   return Math.floor(nNumber / nRoundToInterval) * nRoundToInterval;
 }
 
